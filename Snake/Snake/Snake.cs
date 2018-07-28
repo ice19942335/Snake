@@ -41,6 +41,7 @@ namespace Snake
             return nextPoint;
         }
 
+        //Methood
         public void HandleKey(ConsoleKey key)
         {
             if (key == ConsoleKey.LeftArrow)
