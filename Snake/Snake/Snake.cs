@@ -8,7 +8,7 @@ namespace Snake
 {
     class Snake : Figure
     {
-        Direction direction;
+        public Direction direction;
 
         public Snake(Point tall, int lenght, Direction _direction)
         {
@@ -22,11 +22,12 @@ namespace Snake
             }
         }
 
-        internal void Move()
+        public void Move()
         {
             Point tall = pList.First();
             pList.Remove(tall);
             Point head = GetMaxPoint();
+            pList.Add(head);
 
             tall.Clear();
             head.Draw();
