@@ -26,14 +26,14 @@ namespace Snake
         {
             Point tall = pList.First();
             pList.Remove(tall);
-            Point head = GetMaxPoint();
+            Point head = GetNextPoint();
             pList.Add(head);
 
             tall.Clear();
             head.Draw();
         }
 
-        public Point GetMaxPoint()
+        public Point GetNextPoint()
         {
             Point head = pList.Last();
             Point nextPoint = new Point(head);
@@ -41,17 +41,63 @@ namespace Snake
             return nextPoint;
         }
 
-        //Methood
+        internal bool IsHitTail()
+        {
+            var head = pList.Last();
+            for (int i = 0; i < pList.Count - 2; i++)
+            {
+                if (head.IsHit(pList[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        //Methood, change snake direction + protection of reversing
         public void HandleKey(ConsoleKey key)
         {
             if (key == ConsoleKey.LeftArrow)
-                direction = Direction.LEFT;
+            {
+                if (direction != Direction.RIGHT)
+                {
+                    direction = Direction.LEFT;
+                }
+            }
             else if (key == ConsoleKey.RightArrow)
-                direction = Direction.RIGHT;
+            {
+                if (direction != Direction.LEFT)
+                {
+                    direction = Direction.RIGHT;
+                }
+            } 
             else if (key == ConsoleKey.UpArrow)
-                direction = Direction.UP;
+            {
+                if (direction != Direction.DOWN)
+                {
+                    direction = Direction.UP;
+                }
+            }
             else if (key == ConsoleKey.DownArrow)
-                direction = Direction.DOWN;
+            {
+                if (direction != Direction.UP)
+                {
+                    direction = Direction.DOWN;
+                }
+            }
+        }
+
+        public bool Eat(Point food)
+        {
+            Point head = GetNextPoint();
+            if (head.IsHit(food))
+            {
+                food.sym = head.sym;
+                pList.Add(food);
+                return true;
+            }
+            else
+            { return false; }
         }
     }
 }

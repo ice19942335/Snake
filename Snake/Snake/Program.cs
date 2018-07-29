@@ -14,30 +14,44 @@ namespace Snake
             //Set field size
             Console.SetBufferSize(80, 25);
 
-            //Drow borders
-            HorisontalLine upLine = new HorisontalLine(0, 78, 0, '+');
-            HorisontalLine downLine = new HorisontalLine(0, 78, 24, '+');
-            VerticalLine leftLine = new VerticalLine(0, 24, 0, '+');
-            VerticalLine rightLine = new VerticalLine(0, 24, 78, '+');
-            upLine.Drow();
-            downLine.Drow();
-            leftLine.Drow();
-            rightLine.Drow();
+            
+
+            Walls walls = new Walls(80, 25);
+            walls.Draw();
 
             //Drow snake points
             Point p = new Point(4, 5, '*');
             Snake snake = new Snake(p, 5, Direction.RIGHT);
-            snake.Drow();
-            
+            snake.Draw();
+
+            FoodCreator foodCreator = new FoodCreator(80, 25, '#');
+            Point food = foodCreator.CreateFood();
+            food.Draw();
+
             while (true)
             {
+                if (walls.IsHit(snake) || snake.IsHitTail())
+                {
+                    Console.ReadKey();
+                    break;
+                }
+                if (snake.Eat(food))
+                {
+                    food = foodCreator.CreateFood();
+                    food.Draw();
+                }
+                else
+                {
+                    snake.Move();
+                }
+
+                Thread.Sleep(50);
+
                 if (Console.KeyAvailable)
                 {
                     ConsoleKeyInfo key = Console.ReadKey();
                     snake.HandleKey(key.Key);
                 }
-                Thread.Sleep(50);
-                snake.Move();
             }
         }
     }
